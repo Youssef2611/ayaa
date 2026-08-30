@@ -1228,7 +1228,7 @@
 
   voiceAudio.addEventListener('canplaythrough', () => {
     voiceReady = true;
-    voiceStatus.textContent = '🎤 اضغط لتشغيل الرسالة';
+    voiceStatus.textContent = 'إسمعي يا نن عيني 💖💕';
     voicePlayBtn.disabled = false;
   });
 
@@ -1266,7 +1266,7 @@
       songPlayBtn.textContent = '⏸';
     }).catch(error => {
       console.warn("تعذر تشغيل الصوت تلقائياً، يرجى النقر على زر التشغيل.", error);
-      songStatus.textContent = '🔊 اضغط للتشغيل';
+      songStatus.textContent = '🎶 أسمعي';
       songPlayBtn.textContent = '▶';
     });
   }
