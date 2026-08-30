@@ -154,7 +154,7 @@
       radial-gradient(2px 2px at 90% 90%, rgba(255,255,255,0.35), transparent);
   }
 
-  /* ===== التعديل: تحويل البالونات إلى قلوب ===== */
+  /* ===== قلوب تطير ===== */
   .heart{
     position:fixed;
     bottom:-120px;
@@ -162,13 +162,11 @@
     height:40px;
     opacity:0.6;
     z-index:0;
-    animation:rise linear infinite;
-    /* تشكيل القلب */
+    animation:rise linear infinite, heartbeat 2.5s ease-in-out infinite;
     background: var(--pink);
     transform: rotate(-45deg);
     box-shadow: 0 0 20px rgba(236,72,153,0.3);
   }
-  /* تكوين القلب باستخدام ::before و ::after */
   .heart::before,
   .heart::after{
     content:'';
@@ -186,7 +184,7 @@
     top:0;
     left:-20px;
   }
-  
+
   /* توزيع القلوب بألوان وأحجام مختلفة */
   .heart.h1{
     background:var(--coral);
@@ -235,7 +233,6 @@
   .heart.h3::before{ top:-19px; }
   .heart.h3::after{ left:-19px; }
 
-  /* قلوب إضافية بألوان متنوعة */
   .heart.h4{
     background:var(--purple);
     left:30%;
@@ -300,6 +297,54 @@
   .heart.h7::before{ top:-20px; }
   .heart.h7::after{ left:-20px; }
 
+  .heart.h8{
+    background:#ff6b81;
+    left:75%;
+    animation-duration:23s;
+    animation-delay:7s;
+    width:30px;
+    height:30px;
+  }
+  .heart.h8::before,
+  .heart.h8::after{
+    width:30px;
+    height:30px;
+  }
+  .heart.h8::before{ top:-15px; }
+  .heart.h8::after{ left:-15px; }
+
+  .heart.h9{
+    background:#eccc68;
+    right:75%;
+    animation-duration:17s;
+    animation-delay:9s;
+    width:48px;
+    height:48px;
+  }
+  .heart.h9::before,
+  .heart.h9::after{
+    width:48px;
+    height:48px;
+  }
+  .heart.h9::before{ top:-24px; }
+  .heart.h9::after{ left:-24px; }
+
+  .heart.h10{
+    background:#dfe6e9;
+    left:45%;
+    animation-duration:25s;
+    animation-delay:1s;
+    width:28px;
+    height:28px;
+  }
+  .heart.h10::before,
+  .heart.h10::after{
+    width:28px;
+    height:28px;
+  }
+  .heart.h10::before{ top:-14px; }
+  .heart.h10::after{ left:-14px; }
+
   @keyframes rise{
     from{
       transform:translateY(0) rotate(-45deg) scale(0.8);
@@ -311,17 +356,12 @@
     }
   }
 
-  /* تأثير نبض للقلوب */
   @keyframes heartbeat{
     0%{ transform:rotate(-45deg) scale(1); }
     25%{ transform:rotate(-45deg) scale(1.08); }
     50%{ transform:rotate(-45deg) scale(1); }
     75%{ transform:rotate(-45deg) scale(1.05); }
     100%{ transform:rotate(-45deg) scale(1); }
-  }
-
-  .heart{
-    animation: rise linear infinite, heartbeat 2.5s ease-in-out infinite;
   }
 
   main{ position:relative; z-index:1; max-width:640px; margin:0 auto; padding:44px 20px 20px; }
@@ -556,6 +596,39 @@
   @media (prefers-reduced-motion: reduce){
     .heart, .flame{ animation:none !important; }
   }
+
+  /* ===== قلوب تطير إضافية ===== */
+  .flying-hearts-container{
+    position:fixed;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .flying-heart{
+    position:absolute;
+    bottom:-50px;
+    font-size:24px;
+    opacity:0;
+    animation:flyHeart linear forwards;
+  }
+  @keyframes flyHeart{
+    0%{
+      transform:translateY(0) scale(0.5) rotate(0deg);
+      opacity:0;
+    }
+    10%{
+      opacity:0.9;
+    }
+    90%{
+      opacity:0.9;
+    }
+    100%{
+      transform:translateY(-110vh) scale(1.2) rotate(720deg);
+      opacity:0;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -580,8 +653,8 @@
 <!-- ============ CELEBRATION PAGE ============ -->
 <div id="celebration">
   <div class="stars"></div>
-  
-  <!-- ===== التعديل: استبدال البالونات بقلوب ===== -->
+
+  <!-- ===== قلوب ثابتة تطير ===== -->
   <div class="heart h1"></div>
   <div class="heart h2"></div>
   <div class="heart h3"></div>
@@ -589,6 +662,12 @@
   <div class="heart h5"></div>
   <div class="heart h6"></div>
   <div class="heart h7"></div>
+  <div class="heart h8"></div>
+  <div class="heart h9"></div>
+  <div class="heart h10"></div>
+
+  <!-- ===== قلوب متطايرة متجددة ===== -->
+  <div class="flying-hearts-container" id="flyingHeartsContainer"></div>
 
   <main>
 
@@ -685,162 +764,152 @@
       </div>
     </section>
 
-<!-- video messages -->
-<section class="section">
-  <span class="eyebrow reveal-el">رسايل فيديو</span>
-  <h2 class="section-title reveal-el">شوفيني بقلبي أقولهالك: كل سنة وانتي طيبة</h2>
-  <p class="section-sub reveal-el">حبيت تشوفي وشي وأنا بهنّيك بيوم مولدك بصوتي وصورتي ♥</p>
-  
-  <!-- فيديو 1 -->
-  <div class="video-frame reveal-el" id="videoFrame1">
-    <video controls playsinline poster="assets/video-poster-1.jpg"
-      onerror="document.getElementById('videoFrame1').classList.add('missing')">
-      <source src="video-1.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-1.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
+    <!-- video messages -->
+    <section class="section">
+      <span class="eyebrow reveal-el">رسايل فيديو</span>
+      <h2 class="section-title reveal-el">شوفيني بقلبي أقولهالك: كل سنة وانتي طيبة</h2>
+      <p class="section-sub reveal-el">حبيت تشوفي وشي وأنا بهنّيك بيوم مولدك بصوتي وصورتي ♥</p>
 
-  <!-- فيديو 2 -->
-  <div class="video-frame reveal-el" id="videoFrame2">
-    <video controls playsinline poster="assets/video-poster-2.jpg"
-      onerror="document.getElementById('videoFrame2').classList.add('missing')">
-      <source src="video-2.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-2.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
+      <div class="video-frame reveal-el" id="videoFrame1">
+        <video controls playsinline poster="assets/video-poster-1.jpg"
+          onerror="document.getElementById('videoFrame1').classList.add('missing')">
+          <source src="video-1.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-1.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
 
-  <!-- فيديو 3 -->
-  <div class="video-frame reveal-el" id="videoFrame3">
-    <video controls playsinline poster="assets/video-poster-3.jpg"
-      onerror="document.getElementById('videoFrame3').classList.add('missing')">
-      <source src="video-3.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-3.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
+      <div class="video-frame reveal-el" id="videoFrame2">
+        <video controls playsinline poster="assets/video-poster-2.jpg"
+          onerror="document.getElementById('videoFrame2').classList.add('missing')">
+          <source src="video-2.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-2.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
 
-  <!-- فيديو 4 -->
-  <div class="video-frame reveal-el" id="videoFrame4">
-    <video controls playsinline poster="assets/video-poster-4.jpg"
-      onerror="document.getElementById('videoFrame4').classList.add('missing')">
-      <source src="video-4.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-4.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
+      <div class="video-frame reveal-el" id="videoFrame3">
+        <video controls playsinline poster="assets/video-poster-3.jpg"
+          onerror="document.getElementById('videoFrame3').classList.add('missing')">
+          <source src="video-3.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-3.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
 
-  <!-- فيديو 5 -->
-  <div class="video-frame reveal-el" id="videoFrame5">
-    <video controls playsinline poster="assets/video-poster-5.jpg"
-      onerror="document.getElementById('videoFrame5').classList.add('missing')">
-      <source src="video-5.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-5.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
+      <div class="video-frame reveal-el" id="videoFrame4">
+        <video controls playsinline poster="assets/video-poster-4.jpg"
+          onerror="document.getElementById('videoFrame4').classList.add('missing')">
+          <source src="video-4.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-4.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
 
-  <!-- فيديو 6 -->
-  <div class="video-frame reveal-el" id="videoFrame6">
-    <video controls playsinline poster="assets/video-poster-6.jpg"
-      onerror="document.getElementById('videoFrame6').classList.add('missing')">
-      <source src="video-6.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-6.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
+      <div class="video-frame reveal-el" id="videoFrame5">
+        <video controls playsinline poster="assets/video-poster-5.jpg"
+          onerror="document.getElementById('videoFrame5').classList.add('missing')">
+          <source src="video-5.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-5.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
 
-  <!-- فيديو 7 -->
-  <div class="video-frame reveal-el" id="videoFrame7">
-    <video controls playsinline poster="assets/video-poster-7.jpg"
-      onerror="document.getElementById('videoFrame7').classList.add('missing')">
-      <source src="video-7.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-7.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
+      <div class="video-frame reveal-el" id="videoFrame6">
+        <video controls playsinline poster="assets/video-poster-6.jpg"
+          onerror="document.getElementById('videoFrame6').classList.add('missing')">
+          <source src="video-6.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-6.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
 
-  <!-- فيديو 8 -->
-  <div class="video-frame reveal-el" id="videoFrame8">
-    <video controls playsinline poster="assets/video-poster-8.jpg"
-      onerror="document.getElementById('videoFrame8').classList.add('missing')">
-      <source src="video-8.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-8.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
+      <div class="video-frame reveal-el" id="videoFrame7">
+        <video controls playsinline poster="assets/video-poster-7.jpg"
+          onerror="document.getElementById('videoFrame7').classList.add('missing')">
+          <source src="video-7.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-7.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
 
-  <!-- فيديو 9 -->
-  <div class="video-frame reveal-el" id="videoFrame9">
-    <video controls playsinline poster="assets/video-poster-9.jpg"
-      onerror="document.getElementById('videoFrame9').classList.add('missing')">
-      <source src="video-9.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-9.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
+      <div class="video-frame reveal-el" id="videoFrame8">
+        <video controls playsinline poster="assets/video-poster-8.jpg"
+          onerror="document.getElementById('videoFrame8').classList.add('missing')">
+          <source src="video-8.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-8.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
 
-  <!-- فيديو 10 -->
-  <div class="video-frame reveal-el" id="videoFrame10">
-    <video controls playsinline poster="assets/video-poster-10.jpg"
-      onerror="document.getElementById('videoFrame10').classList.add('missing')">
-      <source src="video-10.mp4" type="video/mp4">
-    </video>
-    <div class="video-placeholder">
-      <span class="ic">🎬</span>
-      <span>حطي ملف الفيديو في<br>video-10.mp4</span>
-    </div>
-  </div>
-  <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
-    ✨ كلامك هنا - عدليه بعدين
-  </p>
-</section>
+      <div class="video-frame reveal-el" id="videoFrame9">
+        <video controls playsinline poster="assets/video-poster-9.jpg"
+          onerror="document.getElementById('videoFrame9').classList.add('missing')">
+          <source src="video-9.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-9.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
+
+      <div class="video-frame reveal-el" id="videoFrame10">
+        <video controls playsinline poster="assets/video-poster-10.jpg"
+          onerror="document.getElementById('videoFrame10').classList.add('missing')">
+          <source src="video-10.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder">
+          <span class="ic">🎬</span>
+          <span>حطي ملف الفيديو في<br>video-10.mp4</span>
+        </div>
+      </div>
+      <p class="video-caption" style="text-align:center; color:var(--muted); font-size:14px; margin:8px 0 30px;">
+        ✨ كلامك هنا - عدليه بعدين
+      </p>
+    </section>
 
     <!-- voice message -->
     <section class="section">
@@ -848,12 +917,11 @@
       <h2 class="section-title reveal-el">اسمعي صوتي شوية يا حلوة</h2>
       <p class="section-sub reveal-el">في كلام حبيت أقولهولك بصوتي بمناسبة يومك، مش بس بالكتابة ♥</p>
       <div class="bubble reveal-el" style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
-        <span id="voiceStatus">demo</span>
-        <button class="music-bar .play-btn" id="voicePlayBtn" style="width:52px;height:52px;border-radius:50%;border:none;background:linear-gradient(135deg, var(--pink), var(--purple));color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;">▶</button>
+        <span id="voiceStatus">🎤 اضغط لتشغيل الرسالة</span>
+        <button id="voicePlayBtn" style="width:52px;height:52px;border-radius:50%;border:none;background:linear-gradient(135deg, var(--pink), var(--purple));color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;">▶</button>
       </div>
       <audio id="voiceAudio" src="assets/voice-message.mp3"
-        onerror="document.getElementById('voiceStatus').textContent='لسه معملتش أبلود لملف الريكورد'"></audio>
-      <p class="voice-note">(لسه معملتش أبلود لملف الريكورد – حطيه باسم assets/voice-message.mp3)</p>
+        onerror="document.getElementById('voiceStatus').textContent='❌ لم يتم رفع الملف الصوتي'"></audio>
     </section>
 
     <!-- closing -->
@@ -870,18 +938,18 @@
 
   <!-- persistent music bar -->
   <div class="music-bar">
-    <button class="play-btn" id="songPlayBtn">⏸</button>
+    <button class="play-btn" id="songPlayBtn">▶</button>
     <div class="info">
-      <div class="status" id="songStatus">بنم التشغيل الآن</div>
+      <div class="status" id="songStatus">🎵 أغنية الاحتفال</div>
       <div class="title">🎉 أغنية الاحتفال</div>
       <div class="progress-track"><div class="progress-fill" id="songProgress"></div></div>
     </div>
   </div>
-  <audio id="songAudio" src="song.mp3" loop></audio>
+  <audio id="songAudio" src="assets/song.mp3" loop></audio>
 </div>
 
 <script>
-  /* =============== DATA (best-effort transcript from the video) =============== */
+  /* =============== DATA =============== */
   const LETTERS = [
     { letter:'آ', text:'آية ربنا لما انتي، وأحلى حاجة حصلتلي.' },
     { letter:'ي', text:'يا حبيبتي، وكل حاجة في حياتي.. مش مجرد قريبة مني وبس.' },
@@ -1026,6 +1094,7 @@
       errorMsg.classList.remove('show');
       launchFireworks();
       startSong();
+      startFlyingHearts();
     } else {
       errorMsg.classList.add('show');
       passwordInput.classList.remove('shake');
@@ -1082,6 +1151,47 @@
     })();
   }
 
+  /* =============== flying hearts animation =============== */
+  function startFlyingHearts(){
+    const container = document.getElementById('flyingHeartsContainer');
+    const heartEmojis = ['❤️', '💕', '💗', '💖', '💘', '💝', '♥️', '💓'];
+    
+    function createHeart(){
+      const heart = document.createElement('div');
+      heart.className = 'flying-heart';
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      
+      // Random position
+      heart.style.left = Math.random() * 100 + '%';
+      
+      // Random size
+      const size = 16 + Math.random() * 20;
+      heart.style.fontSize = size + 'px';
+      
+      // Random duration
+      const duration = 6 + Math.random() * 8;
+      heart.style.animationDuration = duration + 's';
+      
+      // Random delay
+      heart.style.animationDelay = Math.random() * 2 + 's';
+      
+      container.appendChild(heart);
+      
+      // Remove heart after animation completes
+      setTimeout(() => {
+        heart.remove();
+      }, (duration + 2) * 1000);
+    }
+    
+    // Create initial hearts
+    for (let i = 0; i < 8; i++) {
+      setTimeout(createHeart, i * 800);
+    }
+    
+    // Continue creating hearts
+    setInterval(createHeart, 1500);
+  }
+
   /* =============== candles + confetti =============== */
   const candles = document.querySelectorAll('.candle');
   const candleCount = document.getElementById('candleCount');
@@ -1118,41 +1228,89 @@
 
   /* =============== video message fallback =============== */
   const birthdayVideo = document.getElementById('birthdayVideo');
-  birthdayVideo.addEventListener('error', () => document.getElementById('videoFrame').classList.add('missing'));
+  if (birthdayVideo) {
+    birthdayVideo.addEventListener('error', () => document.getElementById('videoFrame').classList.add('missing'));
+  }
 
   /* =============== voice message player =============== */
   const voiceAudio = document.getElementById('voiceAudio');
   const voicePlayBtn = document.getElementById('voicePlayBtn');
   const voiceStatus = document.getElementById('voiceStatus');
   let voiceReady = true;
-  voiceAudio.addEventListener('error', () => { voiceReady = false; voiceStatus.textContent = 'لسه معملتش أبلود لملف الريكورد'; });
+
+  voiceAudio.addEventListener('error', () => {
+    voiceReady = false;
+    voiceStatus.textContent = '❌ لم يتم رفع الملف الصوتي';
+    voicePlayBtn.disabled = true;
+  });
+
+  voiceAudio.addEventListener('canplaythrough', () => {
+    voiceReady = true;
+    voiceStatus.textContent = '🎤 اضغط لتشغيل الرسالة';
+    voicePlayBtn.disabled = false;
+  });
+
   voicePlayBtn.addEventListener('click', () => {
     if (!voiceReady) return;
-    if (voiceAudio.paused){ voiceAudio.play().catch(()=>{}); voicePlayBtn.textContent = '❚❚'; }
-    else { voiceAudio.pause(); voicePlayBtn.textContent = '▶'; }
+    if (voiceAudio.paused) {
+      songAudio.pause();
+      songPlayBtn.textContent = '▶';
+      songStatus.textContent = '⏸ متوقف مؤقتاً';
+
+      voiceAudio.play().catch(() => {});
+      voicePlayBtn.textContent = '⏹';
+      voiceStatus.textContent = '🎤 جاري التشغيل...';
+    } else {
+      voiceAudio.pause();
+      voicePlayBtn.textContent = '▶';
+      voiceStatus.textContent = '🎤 متوقف';
+    }
   });
-  voiceAudio.addEventListener('ended', () => { voicePlayBtn.textContent = '▶'; });
+
+  voiceAudio.addEventListener('ended', () => {
+    voicePlayBtn.textContent = '▶';
+    voiceStatus.textContent = '🎤 انتهى التشغيل';
+  });
 
   /* =============== persistent celebration song =============== */
   const songAudio = document.getElementById('songAudio');
   const songPlayBtn = document.getElementById('songPlayBtn');
   const songStatus = document.getElementById('songStatus');
   const songProgress = document.getElementById('songProgress');
+
   function startSong(){
     songAudio.play().then(() => {
-      songStatus.textContent = 'بنم التشغيل الآن';
+      songStatus.textContent = '🎵 أغنية الاحتفال';
       songPlayBtn.textContent = '⏸';
-    }).catch(() => {
-      songStatus.textContent = 'دوسي تشغيل الأغنية';
+    }).catch(error => {
+      console.warn("تعذر تشغيل الصوت تلقائياً، يرجى النقر على زر التشغيل.", error);
+      songStatus.textContent = '🔊 اضغط للتشغيل';
       songPlayBtn.textContent = '▶';
     });
   }
+
   songPlayBtn.addEventListener('click', () => {
-    if (songAudio.paused){ songAudio.play().catch(()=>{}); songPlayBtn.textContent = '⏸'; songStatus.textContent = 'بنم التشغيل الآن'; }
-    else { songAudio.pause(); songPlayBtn.textContent = '▶'; songStatus.textContent = 'متوقف'; }
+    if (songAudio.paused) {
+      songAudio.play().catch(() => {});
+      songPlayBtn.textContent = '⏸';
+      songStatus.textContent = '🎵 أغنية الاحتفال';
+    } else {
+      songAudio.pause();
+      songPlayBtn.textContent = '▶';
+      songStatus.textContent = '⏸ متوقف مؤقتاً';
+    }
   });
+
   songAudio.addEventListener('timeupdate', () => {
-    if (songAudio.duration) songProgress.style.width = ((songAudio.currentTime / songAudio.duration) * 100) + '%';
+    if (songAudio.duration) {
+      const progress = (songAudio.currentTime / songAudio.duration) * 100;
+      songProgress.style.width = progress + '%';
+    }
+  });
+
+  songAudio.addEventListener('ended', () => {
+    songAudio.currentTime = 0;
+    songAudio.play().catch(() => {});
   });
 </script>
 
