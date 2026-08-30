@@ -125,7 +125,7 @@
   .error-msg.show{ opacity:1; }
 
   @media (prefers-reduced-motion: reduce){
-    .balloon, .flame, .avatar{ animation:none !important; }
+    .heart, .flame, .avatar{ animation:none !important; }
     .gate-card{ animation:none !important; opacity:1 !important; transform:scale(1) !important; }
   }
 
@@ -154,15 +154,175 @@
       radial-gradient(2px 2px at 90% 90%, rgba(255,255,255,0.35), transparent);
   }
 
-  .balloon{
-    position:fixed; bottom:-120px; width:40px; height:52px;
-    border-radius:50% 50% 50% 50% / 55% 55% 45% 45%;
-    opacity:0.5; z-index:0; animation:rise linear infinite;
+  /* ===== التعديل: تحويل البالونات إلى قلوب ===== */
+  .heart{
+    position:fixed;
+    bottom:-120px;
+    width:40px;
+    height:40px;
+    opacity:0.6;
+    z-index:0;
+    animation:rise linear infinite;
+    /* تشكيل القلب */
+    background: var(--pink);
+    transform: rotate(-45deg);
+    box-shadow: 0 0 20px rgba(236,72,153,0.3);
   }
-  .balloon.b1{ background:var(--coral); right:8%; animation-duration:18s; }
-  .balloon.b2{ background:var(--gold); right:26%; animation-duration:22s; animation-delay:4s; }
-  .balloon.b3{ background:var(--pink); left:12%; animation-duration:16s; animation-delay:2s; }
-  @keyframes rise{ from{ transform:translateY(0) rotate(0deg); } to{ transform:translateY(-118vh) rotate(8deg); } }
+  /* تكوين القلب باستخدام ::before و ::after */
+  .heart::before,
+  .heart::after{
+    content:'';
+    position:absolute;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:inherit;
+  }
+  .heart::before{
+    top:-20px;
+    left:0;
+  }
+  .heart::after{
+    top:0;
+    left:-20px;
+  }
+  
+  /* توزيع القلوب بألوان وأحجام مختلفة */
+  .heart.h1{
+    background:var(--coral);
+    right:8%;
+    animation-duration:18s;
+    width:35px;
+    height:35px;
+  }
+  .heart.h1::before,
+  .heart.h1::after{
+    width:35px;
+    height:35px;
+  }
+  .heart.h1::before{ top:-17.5px; }
+  .heart.h1::after{ left:-17.5px; }
+
+  .heart.h2{
+    background:var(--gold);
+    right:26%;
+    animation-duration:22s;
+    animation-delay:4s;
+    width:45px;
+    height:45px;
+  }
+  .heart.h2::before,
+  .heart.h2::after{
+    width:45px;
+    height:45px;
+  }
+  .heart.h2::before{ top:-22.5px; }
+  .heart.h2::after{ left:-22.5px; }
+
+  .heart.h3{
+    background:var(--pink);
+    left:12%;
+    animation-duration:16s;
+    animation-delay:2s;
+    width:38px;
+    height:38px;
+  }
+  .heart.h3::before,
+  .heart.h3::after{
+    width:38px;
+    height:38px;
+  }
+  .heart.h3::before{ top:-19px; }
+  .heart.h3::after{ left:-19px; }
+
+  /* قلوب إضافية بألوان متنوعة */
+  .heart.h4{
+    background:var(--purple);
+    left:30%;
+    animation-duration:20s;
+    animation-delay:6s;
+    width:32px;
+    height:32px;
+  }
+  .heart.h4::before,
+  .heart.h4::after{
+    width:32px;
+    height:32px;
+  }
+  .heart.h4::before{ top:-16px; }
+  .heart.h4::after{ left:-16px; }
+
+  .heart.h5{
+    background:#fd79a8;
+    right:45%;
+    animation-duration:24s;
+    animation-delay:3s;
+    width:42px;
+    height:42px;
+  }
+  .heart.h5::before,
+  .heart.h5::after{
+    width:42px;
+    height:42px;
+  }
+  .heart.h5::before{ top:-21px; }
+  .heart.h5::after{ left:-21px; }
+
+  .heart.h6{
+    background:#fdcb6e;
+    left:55%;
+    animation-duration:19s;
+    animation-delay:8s;
+    width:36px;
+    height:36px;
+  }
+  .heart.h6::before,
+  .heart.h6::after{
+    width:36px;
+    height:36px;
+  }
+  .heart.h6::before{ top:-18px; }
+  .heart.h6::after{ left:-18px; }
+
+  .heart.h7{
+    background:#a29bfe;
+    right:60%;
+    animation-duration:21s;
+    animation-delay:5s;
+    width:40px;
+    height:40px;
+  }
+  .heart.h7::before,
+  .heart.h7::after{
+    width:40px;
+    height:40px;
+  }
+  .heart.h7::before{ top:-20px; }
+  .heart.h7::after{ left:-20px; }
+
+  @keyframes rise{
+    from{
+      transform:translateY(0) rotate(-45deg) scale(0.8);
+      opacity:0.2;
+    }
+    to{
+      transform:translateY(-118vh) rotate(-30deg) scale(1.2);
+      opacity:0.8;
+    }
+  }
+
+  /* تأثير نبض للقلوب */
+  @keyframes heartbeat{
+    0%{ transform:rotate(-45deg) scale(1); }
+    25%{ transform:rotate(-45deg) scale(1.08); }
+    50%{ transform:rotate(-45deg) scale(1); }
+    75%{ transform:rotate(-45deg) scale(1.05); }
+    100%{ transform:rotate(-45deg) scale(1); }
+  }
+
+  .heart{
+    animation: rise linear infinite, heartbeat 2.5s ease-in-out infinite;
+  }
 
   main{ position:relative; z-index:1; max-width:640px; margin:0 auto; padding:44px 20px 20px; }
 
@@ -394,7 +554,7 @@
   }
 
   @media (prefers-reduced-motion: reduce){
-    .balloon, .flame{ animation:none !important; }
+    .heart, .flame{ animation:none !important; }
   }
 </style>
 </head>
@@ -420,9 +580,15 @@
 <!-- ============ CELEBRATION PAGE ============ -->
 <div id="celebration">
   <div class="stars"></div>
-  <div class="balloon b1"></div>
-  <div class="balloon b2"></div>
-  <div class="balloon b3"></div>
+  
+  <!-- ===== التعديل: استبدال البالونات بقلوب ===== -->
+  <div class="heart h1"></div>
+  <div class="heart h2"></div>
+  <div class="heart h3"></div>
+  <div class="heart h4"></div>
+  <div class="heart h5"></div>
+  <div class="heart h6"></div>
+  <div class="heart h7"></div>
 
   <main>
 
