@@ -1280,7 +1280,7 @@
 
   function startSong(){
     songAudio.play().then(() => {
-      songStatus.textContent = '🎵 أغنية الاحتفال';
+      songStatus.textContent = '🎶 أسمعي';
       songPlayBtn.textContent = '⏸';
     }).catch(error => {
       console.warn("تعذر تشغيل الصوت تلقائياً، يرجى النقر على زر التشغيل.", error);
@@ -1293,7 +1293,7 @@
     if (songAudio.paused) {
       songAudio.play().catch(() => {});
       songPlayBtn.textContent = '⏸';
-      songStatus.textContent = '🎵 أغنية الاحتفال';
+      songStatus.textContent = '🎶 أسمعي';
     } else {
       songAudio.pause();
       songPlayBtn.textContent = '▶';
