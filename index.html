@@ -628,7 +628,27 @@
       opacity:0;
     }
   }
+  /* ============ خلفية الصورة ============ */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: url('background.jpg') center/cover no-repeat fixed;
+    filter: brightness(0.4) saturate(0.8);
+  }
 
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: rgba(10, 5, 16, 0.5);
+  }
+
+  body.unlocked {
+    background: transparent;
+  }
 </style>
 </head>
 <body>
@@ -1092,6 +1112,8 @@
       document.body.classList.add('unlocked');
       celebration.classList.add('show');
       errorMsg.classList.remove('show');
+      // إزالة الخلفيات الإضافية بعد فتح القفل
+      document.body.style.background = 'transparent';
       launchFireworks();
       startSong();
       startFlyingHearts();
