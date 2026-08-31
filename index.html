@@ -1848,28 +1848,26 @@
 
         function primeVideoThumbnails() {
             document.querySelectorAll('.video-frame video').forEach((v) => {
-                // عرض الصورة المصغرة من الثانية 5
+                // 1. الصورة المصغرة من الثانية 5
                 v.addEventListener('loadedmetadata', () => {
                     try { v.currentTime = 5; } catch (e) { /* ignore */ }
                 });
                 v.addEventListener('seeked', function onFirstSeek() {
                     v.removeEventListener('seeked', onFirstSeek);
-                    v.currentTime = 5; // تبقى الصورة المصغرة عند الثانية 5
+                    v.currentTime = 5;
                 });
                 if (v.readyState >= 1) {
                     try { v.currentTime = 5; } catch (e) { /* ignore */ }
                 }
         
-                // عند تشغيل الفيديو، يبدأ من الثانية 0
+                // 2. عند التشغيل، يبدأ من الثانية 0
                 v.addEventListener('play', function onPlay() {
-                    // إذا كان الفيديو في البداية (عند الثانية 5)، ارجع إلى 0
                     if (v.currentTime === 5 || v.currentTime < 0.5) {
                         v.currentTime = 0;
                     }
                 });
             });
         }
-
         // =============== FLYING HEARTS ===============
         function startFlyingHearts() {
             const container = document.getElementById('flyingHeartsContainer');
