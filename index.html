@@ -1854,7 +1854,7 @@
                 });
                 v.addEventListener('seeked', function onFirstSeek() {
                     v.removeEventListener('seeked', onFirstSeek);
-                    v.currentTime = 0;
+                    v.currentTime = 5;
                 });
                 // if metadata is already loaded by the time we attach (cached video), trigger manually
                 if (v.readyState >= 1) {
