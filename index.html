@@ -1155,6 +1155,24 @@
             width: 100%;
             display: block;
         }
+        .video-frame.missing {
+            aspect-ratio: 9/16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(150deg, #3a2140, #1c0f22);
+        }
+        .video-frame.missing video {
+            display: none;
+        }
+        .video-frame.missing::after {
+            content: "🎬 الفيديو ده لسه مش مرفوع";
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.8;
+        }
         .video-placeholder {
             aspect-ratio: 9/16;
             display: flex;
@@ -1333,7 +1351,7 @@
         <main>
             <!-- Hero -->
             <div class="avatar-lg reveal-el">
-                <img src="avatar.jpg" alt="" onerror="this.style.display='none'; this.parentElement.innerHTML+='🤍';" />
+                <img src="avatar.jpg" alt="" onerror="this.onerror=null; this.style.display='none'; this.insertAdjacentHTML('afterend','🤍');" />
             </div>
             <span class="badge reveal-el">🎂 يوم مولد أحلى بنت في الدنيا ✨</span>
             <h1 class="name reveal-el">آية</h1>
@@ -1446,7 +1464,7 @@
 
                 <!-- Video 1 -->
                 <div class="video-frame reveal-el" id="videoFrame1">
-                    <video controls playsinline poster="assets/video-poster-1.jpg" onerror="document.getElementById('videoFrame1').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame1').classList.add('missing')">
                         <source src="video-1.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1456,7 +1474,7 @@
 
                 <!-- Video 2 -->
                 <div class="video-frame reveal-el" id="videoFrame2">
-                    <video controls playsinline poster="assets/video-poster-2.jpg" onerror="document.getElementById('videoFrame2').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame2').classList.add('missing')">
                         <source src="video-2.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1466,7 +1484,7 @@
 
                 <!-- Video 3 -->
                 <div class="video-frame reveal-el" id="videoFrame3">
-                    <video controls playsinline poster="assets/video-poster-3.jpg" onerror="document.getElementById('videoFrame3').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame3').classList.add('missing')">
                         <source src="video-3.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1476,7 +1494,7 @@
 
                 <!-- Video 4 -->
                 <div class="video-frame reveal-el" id="videoFrame4">
-                    <video controls playsinline poster="assets/video-poster-4.jpg" onerror="document.getElementById('videoFrame4').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame4').classList.add('missing')">
                         <source src="video-4.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1486,7 +1504,7 @@
 
                 <!-- Video 5 -->
                 <div class="video-frame reveal-el" id="videoFrame5">
-                    <video controls playsinline poster="assets/video-poster-5.jpg" onerror="document.getElementById('videoFrame5').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame5').classList.add('missing')">
                         <source src="video-5.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1496,7 +1514,7 @@
 
                 <!-- Video 6 -->
                 <div class="video-frame reveal-el" id="videoFrame6">
-                    <video controls playsinline poster="assets/video-poster-6.jpg" onerror="document.getElementById('videoFrame6').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame6').classList.add('missing')">
                         <source src="video-6.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1506,7 +1524,7 @@
 
                 <!-- Video 7 -->
                 <div class="video-frame reveal-el" id="videoFrame7">
-                    <video controls playsinline poster="assets/video-poster-7.jpg" onerror="document.getElementById('videoFrame7').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame7').classList.add('missing')">
                         <source src="video-7.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1516,7 +1534,7 @@
 
                 <!-- Video 8 -->
                 <div class="video-frame reveal-el" id="videoFrame8">
-                    <video controls playsinline poster="assets/video-poster-8.jpg" onerror="document.getElementById('videoFrame8').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame8').classList.add('missing')">
                         <source src="video-8.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1526,7 +1544,7 @@
 
                 <!-- Video 9 -->
                 <div class="video-frame reveal-el" id="videoFrame9">
-                    <video controls playsinline poster="assets/video-poster-9.jpg" onerror="document.getElementById('videoFrame9').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame9').classList.add('missing')">
                         <source src="video-9.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1536,7 +1554,7 @@
 
                 <!-- Video 10 -->
                 <div class="video-frame reveal-el" id="videoFrame10">
-                    <video controls playsinline poster="assets/video-poster-10.jpg" onerror="document.getElementById('videoFrame10').classList.add('missing')">
+                    <video preload="metadata" controls playsinline onerror="document.getElementById('videoFrame10').classList.add('missing')">
                         <source src="video-10.mp4" type="video/mp4" />
                     </video>
                 </div>
@@ -1622,7 +1640,6 @@
             { front: '✨ يا روح قلبي', back: 'انتي أهم حاجة في حياتي دلوقتي، وده كلام من قلب مش مجاملة.' }
         ];
 
-        // 🔥 تم إصلاح الخطأ هنا: استخدام علامات تنصيص مزدوجة (") لتغليف النص الذي يحتوي على علامات تنصيص مفردة
         const MSG_CARDS = [{
             icon: '✨',
             title: 'يا روح قلبي',
@@ -1746,6 +1763,7 @@
                 launchFireworks();
                 startSong();
                 startFlyingHearts();
+                primeVideoThumbnails();
             } else {
                 errorMsg.classList.add('show');
                 passwordInput.classList.remove('shake');
@@ -1826,6 +1844,23 @@
                     scheduleAmbient();
                 }, nextIn);
             })();
+        }
+
+        // =============== VIDEO THUMBNAILS: show the real first frame, not black ===============
+        function primeVideoThumbnails() {
+            document.querySelectorAll('.video-frame video').forEach((v) => {
+                v.addEventListener('loadedmetadata', () => {
+                    try { v.currentTime = 0.05; } catch (e) { /* ignore */ }
+                });
+                v.addEventListener('seeked', function onFirstSeek() {
+                    v.removeEventListener('seeked', onFirstSeek);
+                    v.currentTime = 0;
+                });
+                // if metadata is already loaded by the time we attach (cached video), trigger manually
+                if (v.readyState >= 1) {
+                    try { v.currentTime = 0.05; } catch (e) { /* ignore */ }
+                }
+            });
         }
 
         // =============== FLYING HEARTS ===============
