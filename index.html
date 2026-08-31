@@ -1849,6 +1849,7 @@
         // =============== VIDEO THUMBNAILS: show the real first frame, not black ===============
         function primeVideoThumbnails() {
             document.querySelectorAll('.video-frame video').forEach((v) => {
+                // جعل الصورة المصغرة من الثانية الخامسة
                 v.addEventListener('loadedmetadata', () => {
                     try { v.currentTime = 5; } catch (e) { /* ignore */ }
                 });
@@ -1856,10 +1857,16 @@
                     v.removeEventListener('seeked', onFirstSeek);
                     v.currentTime = 5;
                 });
-                // if metadata is already loaded by the time we attach (cached video), trigger manually
                 if (v.readyState >= 1) {
                     try { v.currentTime = 5; } catch (e) { /* ignore */ }
                 }
+        
+                // ➕ إضافة: عند تشغيل الفيديو، يبدأ من الثانية الخامسة
+                v.addEventListener('play', function onPlay() {
+                    if (v.currentTime < 5) {
+                        v.currentTime = 5;
+                    }
+                });
             });
         }
 
