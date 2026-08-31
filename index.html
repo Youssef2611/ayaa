@@ -244,6 +244,8 @@
             opacity: 0;
             transition: opacity 0.8s ease;
             padding-bottom: 110px;
+            position: relative;
+            z-index: 1;
         }
         #celebration.show {
             opacity: 1;
@@ -256,7 +258,6 @@
         }
 
         /* ======== BACKGROUND IMAGE (FIXED) ======== */
-        /* تأكد من وجود صورة باسم background.jpg في نفس المجلد */
         body::before {
             content: "";
             position: fixed;
@@ -558,7 +559,7 @@
         /* ======== MAIN LAYOUT ======== */
         main {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             max-width: 640px;
             margin: 0 auto;
             padding: 44px 20px 20px;
@@ -1376,6 +1377,49 @@
                 opacity: 0;
             }
         }
+
+        /* ======== CLICK HEART (ظهر عند الضغط على الخلفية) ======== */
+        .click-heart {
+            position: fixed;
+            z-index: 30;
+            font-size: 80px;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0);
+            animation: heartPop 0.6s ease-out forwards;
+            text-shadow: 0 0 40px rgba(236, 72, 153, 0.8), 0 0 80px rgba(168, 85, 247, 0.6);
+            filter: drop-shadow(0 0 20px rgba(236, 72, 153, 0.5));
+            user-select: none;
+        }
+        @keyframes heartPop {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(-20deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.4) rotate(10deg);
+                opacity: 1;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(0.9) rotate(-5deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        .click-heart.fade-out {
+            animation: heartFade 0.5s ease-in forwards;
+        }
+        @keyframes heartFade {
+            0% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.5) rotate(20deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2073,6 +2117,62 @@
         songAudio.addEventListener('ended', () => {
             songAudio.currentTime = 0;
             songAudio.play().catch(() => {});
+        });
+
+        // ============================================================
+        // =============== CLICK ON BACKGROUND → SHOW HEART ===============
+        // ============================================================
+        let heartTimeout = null;
+        let isHeartShowing = false;
+
+        document.addEventListener('click', function(e) {
+            // نمنع ظهور القلب إذا كان الضغط على عناصر تفاعلية (أزرار، روابط، مدخلات، فيديو، إلخ)
+            const target = e.target;
+            if (target.closest('button') || 
+                target.closest('a') || 
+                target.closest('input') || 
+                target.closest('video') ||
+                target.closest('.flip-card') ||
+                target.closest('.msg-card') ||
+                target.closest('.candle') ||
+                target.closest('.modal-card') ||
+                target.closest('.modal-overlay') ||
+                target.closest('.music-bar') ||
+                target.closest('#voicePlayBtn')) {
+                return;
+            }
+
+            // إذا كان هناك قلب ظاهر بالفعل، نلغيه فوراً
+            if (isHeartShowing) {
+                const existing = document.querySelector('.click-heart');
+                if (existing) {
+                    existing.remove();
+                }
+                if (heartTimeout) {
+                    clearTimeout(heartTimeout);
+                    heartTimeout = null;
+                }
+                isHeartShowing = false;
+            }
+
+            // إنشاء قلب جديد
+            const heart = document.createElement('div');
+            heart.className = 'click-heart';
+            heart.textContent = '❤️';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            document.body.appendChild(heart);
+            isHeartShowing = true;
+
+            // بعد 3 ثواني نخفي القلب
+            heartTimeout = setTimeout(() => {
+                heart.classList.add('fade-out');
+                setTimeout(() => {
+                    heart.remove();
+                    isHeartShowing = false;
+                    heartTimeout = null;
+                }, 500);
+            }, 3000);
         });
     </script>
 </body>
