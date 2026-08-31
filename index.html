@@ -1850,7 +1850,7 @@
         function primeVideoThumbnails() {
             document.querySelectorAll('.video-frame video').forEach((v) => {
                 v.addEventListener('loadedmetadata', () => {
-                    try { v.currentTime = 0.05; } catch (e) { /* ignore */ }
+                    try { v.currentTime = 1; } catch (e) { /* ignore */ }
                 });
                 v.addEventListener('seeked', function onFirstSeek() {
                     v.removeEventListener('seeked', onFirstSeek);
@@ -1858,7 +1858,7 @@
                 });
                 // if metadata is already loaded by the time we attach (cached video), trigger manually
                 if (v.readyState >= 1) {
-                    try { v.currentTime = 0.05; } catch (e) { /* ignore */ }
+                    try { v.currentTime = 1; } catch (e) { /* ignore */ }
                 }
             });
         }
